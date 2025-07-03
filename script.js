@@ -30,6 +30,10 @@ function hapusBarang(index) {
     simpanBarang();
     tampilkanBarang();
   }
+  function logout() {
+  localStorage.removeItem("isLoggedIn");
+  window.location.href = "login.html";
+}
 }
 
 function tampilkanBarang() {
