@@ -1,3 +1,9 @@
+<script>
+  if (localStorage.getItem("isLoggedIn") !== "true") {
+    window.location.href = "login.html"; // redirect kalau belum login
+  }
+</script>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
