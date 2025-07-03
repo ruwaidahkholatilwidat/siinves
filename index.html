@@ -9,14 +9,26 @@
 <body>
   <div class="container">
     <h1>Inventaris Barang Sekolah</h1>
-    
+
+    <!-- Form Input -->
     <form id="form-barang">
+      <input type="hidden" id="editIndex" />
       <input type="text" id="nama" placeholder="Nama Barang" required />
       <input type="text" id="kategori" placeholder="Kategori" required />
       <input type="number" id="jumlah" placeholder="Jumlah" required />
-      <button type="submit">Tambah Barang</button>
+      <button type="submit">Simpan</button>
     </form>
 
+    <!-- Filter Kategori -->
+    <label for="filterKategori">Filter Kategori:</label>
+    <select id="filterKategori">
+      <option value="">Semua</option>
+    </select>
+
+    <!-- Export Button -->
+    <button onclick="exportExcel()">Export ke Excel</button>
+
+    <!-- Tabel -->
     <h2>Daftar Barang</h2>
     <table id="tabel-barang">
       <thead>
