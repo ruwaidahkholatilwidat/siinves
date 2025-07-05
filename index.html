@@ -2,37 +2,63 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Inventaris Barang Sekolah</title>
-  <link rel="stylesheet" href="style.css"/>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6fa;
+      display: flex;
+      justify-content: center;
+      padding-top: 50px;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      width: 600px;
+    }
+    input, select, button {
+      margin: 5px 0;
+      padding: 8px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background: #eee;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
     <h1>Inventaris Barang Sekolah</h1>
 
-    <!-- Form Input -->
-    <form id="form-barang">
-      <input type="hidden" id="editIndex" />
-      <input type="text" id="nama" placeholder="Nama Barang" required />
-      <input type="text" id="kategori" placeholder="Kategori" required />
-      <input type="number" id="jumlah" placeholder="Jumlah" required />
-      <button type="submit">Simpan</button>
-    </form>
+    <input type="text" id="nama" placeholder="Nama Barang">
+    <input type="text" id="kategori" placeholder="Kategori">
+    <input type="number" id="jumlah" placeholder="Jumlah">
+    <button onclick="simpanBarang()">Simpan</button>
 
-    <!-- Filter Kategori -->
-    <label for="filterKategori">Filter Kategori:</label>
-    <select id="filterKategori">
-      <option value="">Semua</option>
-    </select>
-
-    <!-- Export Button -->
+    <label>Filter Kategori:
+      <select id="filterKategori" onchange="tampilkanBarang()">
+        <option value="semua">Semua</option>
+      </select>
+    </label>
     <button onclick="exportExcel()">Export ke Excel</button>
- <button onclick="logout()">Logout</button>
+    <button onclick="logout()">Logout</button>
 
-    <!-- Tabel -->
     <h2>Daftar Barang</h2>
-    <table id="tabel-barang">
+    <table>
       <thead>
         <tr>
           <th>Nama</th>
@@ -41,10 +67,89 @@
           <th>Aksi</th>
         </tr>
       </thead>
-      <tbody></tbody>
+      <tbody id="tabelBarang"></tbody>
     </table>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    let daftarBarang = JSON.parse(localStorage.getItem('barang')) || [];
+
+    function simpanBarang() {
+      const nama = document.getElementById('nama').value.trim();
+      const kategori = document.getElementById('kategori').value.trim();
+      const jumlah = document.getElementById('jumlah').value;
+
+      if (!nama || !kategori || !jumlah) {
+        alert('Semua field wajib diisi!');
+        return;
+      }
+
+      daftarBarang.push({ nama, kategori, jumlah });
+      localStorage.setItem('barang', JSON.stringify(daftarBarang));
+      document.getElementById('nama').value = '';
+      document.getElementById('kategori').value = '';
+      document.getElementById('jumlah').value = '';
+      tampilkanBarang();
+    }
+
+    function tampilkanBarang() {
+      const filter = document.getElementById('filterKategori').value;
+      const tbody = document.getElementById('tabelBarang');
+      tbody.innerHTML = '';
+
+      const kategoriSet = new Set();
+      daftarBarang.forEach((barang, index) => {
+        kategoriSet.add(barang.kategori);
+        if (filter === 'semua' || filter === barang.kategori) {
+          tbody.innerHTML += `
+            <tr>
+              <td>${barang.nama}</td>
+              <td>${barang.kategori}</td>
+              <td>${barang.jumlah}</td>
+              <td><button onclick="hapusBarang(${index})">Hapus</button></td>
+            </tr>`;
+        }
+      });
+
+      // Update dropdown filter
+      const filterSelect = document.getElementById('filterKategori');
+      filterSelect.innerHTML = '<option value="semua">Semua</option>';
+      kategoriSet.forEach(k => {
+        filterSelect.innerHTML += `<option value="${k}">${k}</option>`;
+      });
+      filterSelect.value = filter;
+    }
+
+    function hapusBarang(index) {
+      if (confirm('Yakin ingin menghapus barang ini?')) {
+        daftarBarang.splice(index, 1);
+        localStorage.setItem('barang', JSON.stringify(daftarBarang));
+        tampilkanBarang();
+      }
+    }
+
+    function logout() {
+      if (confirm('Yakin ingin logout dan hapus semua data?')) {
+        localStorage.removeItem('barang');
+        daftarBarang = [];
+        tampilkanBarang();
+      }
+    }
+
+    function exportExcel() {
+      let csv = "Nama,Kategori,Jumlah\n";
+      daftarBarang.forEach(b => {
+        csv += `${b.nama},${b.kategori},${b.jumlah}\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = "inventaris_sekolah.csv";
+      link.click();
+    }
+
+    // Tampilkan saat awal
+    tampilkanBarang();
+  </script>
 </body>
 </html>
