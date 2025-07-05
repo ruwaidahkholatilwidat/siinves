@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Data Barang - Inventaris</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #fefae0;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 20px;
+      background-color: #fff8e1;
+      border-radius: 8px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #4e342e;
+    }
+
+    .form-barang {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .form-barang input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #d7ccc8;
+      border-radius: 5px;
+    }
+
+    .form-barang button {
+      padding: 10px 20px;
+      background-color: #8d6e63;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #fffef1;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #d7ccc8;
+      text-align: left;
+    }
+
+    th {
+      background-color: #d7ccc8;
+      color: #4e342e;
+    }
+
+    .hapus-btn {
+      background-color: #a1887f;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .hapus-btn:hover {
+      background-color: #6d4c41;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Data Barang Inventaris</h2>
+    <div class="form-barang">
+      <input type="text" id="nama" placeholder="Nama Barang">
+      <input type="text" id="kategori" placeholder="Kategori">
+      <input type="number" id="jumlah" placeholder="Jumlah">
+      <button onclick="tambahBarang()">Tambah</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Nama</th>
+          <th>Kategori</th>
+          <th>Jumlah</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody id="daftarBarang"></tbody>
+    </table>
+  </div>
+
+  <script>
+    let data = JSON.parse(localStorage.getItem('barang')) || [];
+
+    function simpan() {
+      localStorage.setItem('barang', JSON.stringify(data));
+    }
+
+    function tampilkanBarang() {
+      const tbody = document.getElementById('daftarBarang');
+      tbody.innerHTML = '';
+      data.forEach((item, index) => {
+        tbody.innerHTML += `
+          <tr>
+            <td>${item.nama}</td>
+            <td>${item.kategori}</td>
+            <td>${item.jumlah}</td>
+            <td><button class="hapus-btn" onclick="hapus(${index})">Hapus</button></td>
+          </tr>
+        `;
+      });
+    }
+
+    function tambahBarang() {
+      const nama = document.getElementById('nama').value.trim();
+      const kategori = document.getElementById('kategori').value.trim();
+      const jumlah = parseInt(document.getElementById('jumlah').value);
+      if (!nama || !kategori || isNaN(jumlah)) return alert('Lengkapi semua data!');
+      data.push({ nama, kategori, jumlah });
+      simpan();
+      tampilkanBarang();
+      document.getElementById('nama').value = '';
+      document.getElementById('kategori').value = '';
+      document.getElementById('jumlah').value = '';
+    }
+
+    function hapus(index) {
+      if (confirm('Hapus barang ini?')) {
+        data.splice(index, 1);
+        simpan();
+        tampilkanBarang();
+      }
+    }
+
+    // Jalankan saat halaman dibuka
+    tampilkanBarang();
+  </script>
+</body>
+</html>
