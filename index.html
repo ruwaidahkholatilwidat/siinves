@@ -145,6 +145,12 @@
       border-radius: 4px;
       cursor: pointer;
     }
+    <script>
+  if (!localStorage.getItem("loggedIn")) {
+    window.location.href = "login.html";
+  }
+</script>
+
   </style>
 </head>
 <body>
