@@ -1,3 +1,20 @@
+<script>
+  // Data awal (akan dimasukkan ke localStorage hanya sekali)
+  const dataAwal = [
+    { nama: "Laptop", kategori: "Elektronik", jumlah: 5 },
+    { nama: "Kursi", kategori: "Perabot", jumlah: 30 },
+    { nama: "Papan Tulis", kategori: "Alat Tulis", jumlah: 2 }
+  ];
+
+  // Cek apakah localStorage sudah punya data
+  let daftarBarang = JSON.parse(localStorage.getItem('barang'));
+  if (!daftarBarang) {
+    // kalau belum, set data default
+    localStorage.setItem('barang', JSON.stringify(dataAwal));
+    daftarBarang = dataAwal;
+  }
+</script>
+
 let barangList = JSON.parse(localStorage.getItem('barangList')) || [];
 
 function simpanBarang() {
