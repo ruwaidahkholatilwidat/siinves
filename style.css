@@ -1,39 +1,89 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-  font-family: Arial, sans-serif;
-  background: #f0f2f5;
-  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #eaf0f6;
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+  min-height: 100vh;
 }
 
 .container {
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  max-width: 600px;
-  margin: auto;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 30px;
+  width: 100%;
+  max-width: 720px;
 }
 
-form input {
-  padding: 8px;
-  margin: 5px;
-  width: 30%;
+h1, h2 {
+  color: #2b3e5f;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+input, select, button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border: 1px solid #ccd6e0;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: #3c91e6;
+  box-shadow: 0 0 0 2px rgba(60, 145, 230, 0.2);
 }
 
 button {
-  padding: 8px 12px;
+  background-color: #3c91e6;
+  color: white;
+  border: none;
   cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #337acc;
 }
 
 table {
   width: 100%;
-  margin-top: 20px;
   border-collapse: collapse;
-}
-
-table, th, td {
-  border: 1px solid #aaa;
+  margin-top: 15px;
 }
 
 th, td {
-  padding: 10px;
+  padding: 12px;
   text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f0f4f8;
+  color: #2b3e5f;
+}
+
+tr:hover {
+  background-color: #f9fbfd;
+}
+
+td button {
+  padding: 6px 12px;
+  font-size: 14px;
+  background-color: #e53935;
+  border-radius: 4px;
+}
+
+td button:hover {
+  background-color: #c62828;
 }
