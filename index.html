@@ -1,42 +1,39 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Inventaris Barang Sekolah</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f4f6fa;
+      background: #f0f0f0;
+      padding: 20px;
       display: flex;
       justify-content: center;
-      padding-top: 50px;
     }
     .container {
-      background: white;
-      padding: 30px;
+      background: #fff;
+      padding: 20px;
       border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       width: 600px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
     input, select, button {
-      margin: 5px 0;
-      padding: 8px;
       width: 100%;
-      box-sizing: border-box;
+      padding: 8px;
+      margin: 5px 0;
     }
     table {
       width: 100%;
-      margin-top: 20px;
       border-collapse: collapse;
+      margin-top: 20px;
     }
     th, td {
-      border: 1px solid #ccc;
+      border: 1px solid #ddd;
       padding: 8px;
-      text-align: left;
     }
     th {
-      background: #eee;
+      background: #f8f8f8;
     }
   </style>
 </head>
@@ -44,18 +41,16 @@
   <div class="container">
     <h1>Inventaris Barang Sekolah</h1>
 
-    <input type="text" id="nama" placeholder="Nama Barang">
-    <input type="text" id="kategori" placeholder="Kategori">
-    <input type="number" id="jumlah" placeholder="Jumlah">
+    <input type="text" id="nama" placeholder="Nama Barang" />
+    <input type="text" id="kategori" placeholder="Kategori" />
+    <input type="number" id="jumlah" placeholder="Jumlah" />
     <button onclick="simpanBarang()">Simpan</button>
 
-    <label>Filter Kategori:
-      <select id="filterKategori" onchange="tampilkanBarang()">
-        <option value="semua">Semua</option>
-      </select>
-    </label>
-    <button onclick="exportExcel()">Export ke Excel</button>
-    <button onclick="logout()">Logout</button>
+    <label for="filterKategori">Filter Kategori:</label>
+    <select id="filterKategori" onchange="tampilkanBarang()">
+      <option value="semua">Semua</option>
+    </select>
+    <button onclick="logout()">Hapus Semua</button>
 
     <h2>Daftar Barang</h2>
     <table>
@@ -72,47 +67,58 @@
   </div>
 
   <script>
-    let daftarBarang = JSON.parse(localStorage.getItem('barang')) || [];
+    const dataAwal = [
+      { nama: "Laptop", kategori: "Elektronik", jumlah: 10 },
+      { nama: "Kursi Lipat", kategori: "Perabot", jumlah: 25 },
+      { nama: "Spidol", kategori: "Alat Tulis", jumlah: 50 }
+    ];
+
+    let daftarBarang = JSON.parse(localStorage.getItem("barang"));
+    if (!daftarBarang) {
+      localStorage.setItem("barang", JSON.stringify(dataAwal));
+      daftarBarang = dataAwal;
+    }
 
     function simpanBarang() {
-      const nama = document.getElementById('nama').value.trim();
-      const kategori = document.getElementById('kategori').value.trim();
-      const jumlah = document.getElementById('jumlah').value;
+      const nama = document.getElementById("nama").value.trim();
+      const kategori = document.getElementById("kategori").value.trim();
+      const jumlah = document.getElementById("jumlah").value;
 
       if (!nama || !kategori || !jumlah) {
-        alert('Semua field wajib diisi!');
+        alert("Semua field wajib diisi!");
         return;
       }
 
       daftarBarang.push({ nama, kategori, jumlah });
-      localStorage.setItem('barang', JSON.stringify(daftarBarang));
-      document.getElementById('nama').value = '';
-      document.getElementById('kategori').value = '';
-      document.getElementById('jumlah').value = '';
+      localStorage.setItem("barang", JSON.stringify(daftarBarang));
+      document.getElementById("nama").value = "";
+      document.getElementById("kategori").value = "";
+      document.getElementById("jumlah").value = "";
       tampilkanBarang();
     }
 
     function tampilkanBarang() {
-      const filter = document.getElementById('filterKategori').value;
-      const tbody = document.getElementById('tabelBarang');
-      tbody.innerHTML = '';
+      const filter = document.getElementById("filterKategori").value;
+      const tbody = document.getElementById("tabelBarang");
+      tbody.innerHTML = "";
 
       const kategoriSet = new Set();
       daftarBarang.forEach((barang, index) => {
         kategoriSet.add(barang.kategori);
-        if (filter === 'semua' || filter === barang.kategori) {
+        if (filter === "semua" || filter === barang.kategori) {
           tbody.innerHTML += `
             <tr>
               <td>${barang.nama}</td>
               <td>${barang.kategori}</td>
               <td>${barang.jumlah}</td>
               <td><button onclick="hapusBarang(${index})">Hapus</button></td>
-            </tr>`;
+            </tr>
+          `;
         }
       });
 
-      // Update dropdown filter
-      const filterSelect = document.getElementById('filterKategori');
+      // Update filter dropdown
+      const filterSelect = document.getElementById("filterKategori");
       filterSelect.innerHTML = '<option value="semua">Semua</option>';
       kategoriSet.forEach(k => {
         filterSelect.innerHTML += `<option value="${k}">${k}</option>`;
@@ -121,35 +127,22 @@
     }
 
     function hapusBarang(index) {
-      if (confirm('Yakin ingin menghapus barang ini?')) {
+      if (confirm("Yakin ingin menghapus barang ini?")) {
         daftarBarang.splice(index, 1);
-        localStorage.setItem('barang', JSON.stringify(daftarBarang));
+        localStorage.setItem("barang", JSON.stringify(daftarBarang));
         tampilkanBarang();
       }
     }
 
     function logout() {
-      if (confirm('Yakin ingin logout dan hapus semua data?')) {
-        localStorage.removeItem('barang');
+      if (confirm("Yakin ingin menghapus semua data?")) {
+        localStorage.removeItem("barang");
         daftarBarang = [];
         tampilkanBarang();
       }
     }
 
-    function exportExcel() {
-      let csv = "Nama,Kategori,Jumlah\n";
-      daftarBarang.forEach(b => {
-        csv += `${b.nama},${b.kategori},${b.jumlah}\n`;
-      });
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = "inventaris_sekolah.csv";
-      link.click();
-    }
-
-    // Tampilkan saat awal
-    tampilkanBarang();
+    window.onload = tampilkanBarang;
   </script>
 </body>
 </html>
