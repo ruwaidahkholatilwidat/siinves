@@ -1,39 +1,40 @@
 body {
-  background-color: #FFF0F5;
+  background-color: #FFD1DC;
 }
 
 .sidebar {
-  background-color: #FADADD;
-  color: #C2185B;
+  background-color: #FF69B4;
+  color: white;
 }
 
 .sidebar a.active {
-  color: #D81B60;
+  color: #C71585;
 }
 
 .button-tambah {
-  background-color: #F7A6B0;
+  background-color: #FF1493;
   color: white;
 }
 
 .button-tambah:hover {
-  background-color: #EB7F8E;
+  background-color: #C71585;
 }
 
 .card {
-  background-color: #FDE2E4;
-}
-
-.table-header {
-  background-color: #F8BBD0;
+  background-color: #FFB6C1;
   color: #4A4A4A;
 }
 
+.table-header {
+  background-color: #FF69B4;
+  color: white;
+}
+
 .button-hapus {
-  background-color: #E57373;
+  background-color: #FF1493;
   color: white;
 }
 
 .button-hapus:hover {
-  background-color: #EF5350;
+  background-color: #C71585;
 }
