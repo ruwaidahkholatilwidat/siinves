@@ -51,4 +51,87 @@
       margin-bottom: 20px;
     }
 
-    .card-container
+    .card-container {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      background-color: #fff8dc;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      width: 200px;
+    }
+
+    .card h3 {
+      margin: 0;
+      font-size: 18px;
+      color: #6d4c41;
+    }
+
+    .card p {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .logout-btn {
+      margin-top: 30px;
+      background-color: #a1887f;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .logout-btn:hover {
+      background-color: #8d6e63;
+    }
+  </style>
+
+  <script>
+    // Proteksi halaman: arahkan ke login kalau belum login
+    if (localStorage.getItem("loggedIn") !== "true") {
+      window.location.href = "login.html";
+    }
+
+    function logout() {
+      localStorage.removeItem("loggedIn");
+      window.location.href = "login.html";
+    }
+  </script>
+</head>
+<body>
+
+  <div class="sidebar">
+    <h2>Inventaris</h2>
+    <a href="#">Dashboard</a>
+    <a href="#">Data Barang</a>
+    <a href="#">Kategori</a>
+    <a href="#">Laporan</a>
+    <a href="#" onclick="logout()">Logout</a>
+  </div>
+
+  <div class="main">
+    <h1>Dashboard Inventaris Barang</h1>
+    <div class="card-container">
+      <div class="card">
+        <h3>Total Barang</h3>
+        <p>53</p>
+      </div>
+      <div class="card">
+        <h3>Kategori</h3>
+        <p>7</p>
+      </div>
+      <div class="card">
+        <h3>Stok Minimum</h3>
+        <p>5</p>
+      </div>
+    </div>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+
+</body>
+</html>
