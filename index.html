@@ -2,151 +2,49 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>Inventaris Barang Sekolah</title>
-  <style>
-    <head>
-  ...
+  <title>Dashboard SIBK</title>
   <link rel="stylesheet" href="style.css" />
-</head>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f0f0f0;
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-    }
-    .container {
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      width: 600px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    input, select, button {
-      width: 100%;
-      padding: 8px;
-      margin: 5px 0;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
-    }
-    th {
-      background: #f8f8f8;
-    }
-  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
-    <h1>Inventaris Barang Sekolah</h1>
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2>SIBK</h2>
+      <p class="desc">Sistem Informasi Bimbingan Konseling</p>
+      <button class="btn-green">+ Kasus Baru</button>
+      <nav>
+        <ul>
+          <li><a href="#">Dashboard</a></li>
+          <li><a href="#">Data Master</a></li>
+          <li><a href="#">Kelas</a></li>
+          <li><a href="#">Pelanggaran</a></li>
+          <li><a href="#">Sanksi</a></li>
+        </ul>
+      </nav>
+      <footer>
+        <p>&copy; 2025. SIBK by ALFINA DAMAYANTI</p>
+      </footer>
+    </aside>
 
-    <input type="text" id="nama" placeholder="Nama Barang" />
-    <input type="text" id="kategori" placeholder="Kategori" />
-    <input type="number" id="jumlah" placeholder="Jumlah" />
-    <button onclick="simpanBarang()">Simpan</button>
-
-    <label for="filterKategori">Filter Kategori:</label>
-    <select id="filterKategori" onchange="tampilkanBarang()">
-      <option value="semua">Semua</option>
-    </select>
-    <button onclick="logout()">Hapus Semua</button>
-
-    <h2>Daftar Barang</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Nama</th>
-          <th>Kategori</th>
-          <th>Jumlah</th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody id="tabelBarang"></tbody>
-    </table>
+    <!-- Main -->
+    <main class="main">
+      <div class="topbar">
+        <input type="text" placeholder="Search anything..." />
+        <div class="profile"></div>
+      </div>
+      <section class="content">
+        <h1>Dashboard</h1>
+        <p>Selamat datang di Sistem Informasi Bimbingan Konseling</p>
+        <div class="cards">
+          <div class="card"><h3>Total Siswa</h3><p>120</p></div>
+          <div class="card"><h3>Total Guru</h3><p>7</p></div>
+          <div class="card"><h3>Pelanggaran</h3><p>34</p></div>
+        </div>
+      </section>
+    </main>
   </div>
-
-  <script>
-    const dataAwal = [
-      { nama: "Laptop", kategori: "Elektronik", jumlah: 10 },
-      { nama: "Kursi Lipat", kategori: "Perabot", jumlah: 25 },
-      { nama: "Spidol", kategori: "Alat Tulis", jumlah: 50 }
-    ];
-
-    let daftarBarang = JSON.parse(localStorage.getItem("barang"));
-    if (!daftarBarang) {
-      localStorage.setItem("barang", JSON.stringify(dataAwal));
-      daftarBarang = dataAwal;
-    }
-
-    function simpanBarang() {
-      const nama = document.getElementById("nama").value.trim();
-      const kategori = document.getElementById("kategori").value.trim();
-      const jumlah = document.getElementById("jumlah").value;
-
-      if (!nama || !kategori || !jumlah) {
-        alert("Semua field wajib diisi!");
-        return;
-      }
-
-      daftarBarang.push({ nama, kategori, jumlah });
-      localStorage.setItem("barang", JSON.stringify(daftarBarang));
-      document.getElementById("nama").value = "";
-      document.getElementById("kategori").value = "";
-      document.getElementById("jumlah").value = "";
-      tampilkanBarang();
-    }
-
-    function tampilkanBarang() {
-      const filter = document.getElementById("filterKategori").value;
-      const tbody = document.getElementById("tabelBarang");
-      tbody.innerHTML = "";
-
-      const kategoriSet = new Set();
-      daftarBarang.forEach((barang, index) => {
-        kategoriSet.add(barang.kategori);
-        if (filter === "semua" || filter === barang.kategori) {
-          tbody.innerHTML += `
-            <tr>
-              <td>${barang.nama}</td>
-              <td>${barang.kategori}</td>
-              <td>${barang.jumlah}</td>
-              <td><button onclick="hapusBarang(${index})">Hapus</button></td>
-            </tr>
-          `;
-        }
-      });
-
-      // Update filter dropdown
-      const filterSelect = document.getElementById("filterKategori");
-      filterSelect.innerHTML = '<option value="semua">Semua</option>';
-      kategoriSet.forEach(k => {
-        filterSelect.innerHTML += `<option value="${k}">${k}</option>`;
-      });
-      filterSelect.value = filter;
-    }
-
-    function hapusBarang(index) {
-      if (confirm("Yakin ingin menghapus barang ini?")) {
-        daftarBarang.splice(index, 1);
-        localStorage.setItem("barang", JSON.stringify(daftarBarang));
-        tampilkanBarang();
-      }
-    }
-
-    function logout() {
-      if (confirm("Yakin ingin menghapus semua data?")) {
-        localStorage.removeItem("barang");
-        daftarBarang = [];
-        tampilkanBarang();
-      }
-    }
-
-    window.onload = tampilkanBarang;
-  </script>
 </body>
 </html>
