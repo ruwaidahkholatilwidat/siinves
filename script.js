@@ -125,3 +125,70 @@ function exportExcel() {
 }
 
 tampilkanBarang();
+<script>
+  // Lanjutan dari atas...
+
+  function simpanBarang() {
+    const nama = document.getElementById('nama').value.trim();
+    const kategori = document.getElementById('kategori').value.trim();
+    const jumlah = document.getElementById('jumlah').value;
+
+    if (!nama || !kategori || !jumlah) {
+      alert('Semua field wajib diisi!');
+      return;
+    }
+
+    daftarBarang.push({ nama, kategori, jumlah });
+    localStorage.setItem('barang', JSON.stringify(daftarBarang));
+    document.getElementById('nama').value = '';
+    document.getElementById('kategori').value = '';
+    document.getElementById('jumlah').value = '';
+    tampilkanBarang();
+  }
+
+  function tampilkanBarang() {
+    const filter = document.getElementById('filterKategori').value;
+    const tbody = document.getElementById('tabelBarang');
+    tbody.innerHTML = '';
+
+    const kategoriSet = new Set();
+    daftarBarang.forEach((barang, index) => {
+      kategoriSet.add(barang.kategori);
+      if (filter === 'semua' || filter === barang.kategori) {
+        tbody.innerHTML += `
+          <tr>
+            <td>${barang.nama}</td>
+            <td>${barang.kategori}</td>
+            <td>${barang.jumlah}</td>
+            <td><button onclick="hapusBarang(${index})">Hapus</button></td>
+          </tr>`;
+      }
+    });
+
+    const filterSelect = document.getElementById('filterKategori');
+    filterSelect.innerHTML = '<option value="semua">Semua</option>';
+    kategoriSet.forEach(k => {
+      filterSelect.innerHTML += `<option value="${k}">${k}</option>`;
+    });
+    filterSelect.value = filter;
+  }
+
+  function hapusBarang(index) {
+    if (confirm('Yakin ingin menghapus barang ini?')) {
+      daftarBarang.splice(index, 1);
+      localStorage.setItem('barang', JSON.stringify(daftarBarang));
+      tampilkanBarang();
+    }
+  }
+
+  function logout() {
+    if (confirm('Yakin ingin logout dan hapus semua data?')) {
+      localStorage.removeItem('barang');
+      daftarBarang = [];
+      tampilkanBarang();
+    }
+  }
+
+  // Tampilkan saat halaman dimuat
+  window.onload = tampilkanBarang;
+</script>
